@@ -180,10 +180,10 @@ class Trade_receivables(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT"})
 	def CRRYNG_AMNT(self):
 		return self.BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT = None # LN_EXCLDNG_RPRCHS_AGRMNT
-	@lineage(dependencies={"LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP"})
+	LN = None # LN
+	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
-		return self.LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP
+		return self.LN.LN_TYP
 	pass
 	TRD_RCVBL_ASSGND_DBTR_ASSGNMNT = None # TRD_RCVBL_ASSGND_DBTR_ASSGNMNT
 	@lineage(dependencies={"TRD_RCVBL_ASSGND_DBTR_ASSGNMNT.ASSNGND_DBTR_LGL_PRSN_RL_TYP"})
@@ -231,10 +231,10 @@ class Finance_leases(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT"})
 	def CRRYNG_AMNT(self):
 		return self.BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT = None # LN_EXCLDNG_RPRCHS_AGRMNT
-	@lineage(dependencies={"LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP"})
+	LN = None # LN
+	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
-		return self.LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP
+		return self.LN.LN_TYP
 	pass
 	FNNCL_LS_LSS_ASSGNMNT = None # FNNCL_LS_LSS_ASSGNMNT
 	@lineage(dependencies={"FNNCL_LS_LSS_ASSGNMNT.LS_PRTY_RL_TYP"})
@@ -340,10 +340,10 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	def RPYMNT_RGHTS(self):
 		''' return string from RPYMNT_RGHTS enumeration of 2 fro Other_than_on_demand_or_short_notice'''
 		return '2'	
-	LN_EXCLDNG_RPRCHS_AGRMNT = None # LN_EXCLDNG_RPRCHS_AGRMNT
-	@lineage(dependencies={"LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP"})
+	LN = None # LN
+	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
-		return self.LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP
+		return self.LN.LN_TYP
 	pass
 
 class Non_Negotiable_bonds(F_05_01_REF_FINREP_3_0_Base):
@@ -440,10 +440,10 @@ class Credit_card_debt(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT"})
 	def CRRYNG_AMNT(self):
 		return self.BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT = None # LN_EXCLDNG_RPRCHS_AGRMNT
-	@lineage(dependencies={"LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP"})
+	LN = None # LN
+	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
-		return self.LN_EXCLDNG_RPRCHS_AGRMNT.LN_TYP
+		return self.LN.LN_TYP
 	pass
 	CRDT_CRD_DBT_DBTR_ASSGNMNT = None # CRDT_CRD_DBT_DBTR_ASSGNMNT
 	@lineage(dependencies={"CRDT_CRD_DBT_DBTR_ASSGNMNT.LN_DBTR_PRTY_RL_TYP"})
@@ -457,7 +457,7 @@ class F_05_01_REF_FINREP_3_0_Trade_receivables_Table:
 	INTRNTNL_ORGNSTN_Table = None # INTRNTNL_ORGNSTN
 	FNNCL_ASST_INSTRMNT_Table = None # FNNCL_ASST_INSTRMNT
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT_Table = None # LN_EXCLDNG_RPRCHS_AGRMNT
+	LN_Table = None # LN
 	TRD_RCVBL_ASSGND_DBTR_ASSGNMNT_Table = None # TRD_RCVBL_ASSGND_DBTR_ASSGNMNT
 	Trade_receivabless = []# Trade_receivables[]
 	def calc_Trade_receivabless(self) :
@@ -481,7 +481,7 @@ class F_05_01_REF_FINREP_3_0_Finance_leases_Table:
 	INTRNTNL_ORGNSTN_Table = None # INTRNTNL_ORGNSTN
 	FNNCL_ASST_INSTRMNT_Table = None # FNNCL_ASST_INSTRMNT
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT_Table = None # LN_EXCLDNG_RPRCHS_AGRMNT
+	LN_Table = None # LN
 	FNNCL_LS_LSS_ASSGNMNT_Table = None # FNNCL_LS_LSS_ASSGNMNT
 	Finance_leasess = []# Finance_leases[]
 	def calc_Finance_leasess(self) :
@@ -530,7 +530,7 @@ class F_05_01_REF_FINREP_3_0_Other_loans_Table:
 	FNNCL_ASST_INSTRMNT_Table = None # FNNCL_ASST_INSTRMNT
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS
 	FNNCL_ASST_INSTRMNT_DRVD_DT_Table = None # FNNCL_ASST_INSTRMNT_DRVD_DT
-	LN_EXCLDNG_RPRCHS_AGRMNT_Table = None # LN_EXCLDNG_RPRCHS_AGRMNT
+	LN_Table = None # LN
 	OTHR_LN_Table = None # OTHR_LN
 	OTHR_LN_DBTR_ASSGNMNT_Table = None # OTHR_LN_DBTR_ASSGNMNT
 	INSTRMNT_Table = None
@@ -556,11 +556,11 @@ class F_05_01_REF_FINREP_3_0_Other_loans_Table:
 		# set any references you want to on the new Item so that it can refer to themin operations
 
 		
-		for loan in self.LN_EXCLDNG_RPRCHS_AGRMNT_Table:
+		for loan in self.LN_Table:
 			if loan.LN_TYP == '1022':
 				other_loan = loan.Loan_type_delegate
 				new_item = Other_loans() 
-				new_item.LN_EXCLDNG_RPRCHS_AGRMNT = loan
+				new_item.LN = loan
 				for debtor in  self.OTHR_LN_DBTR_ASSGNMNT_Table:
 					if debtor.Other_loan_has_Debtor_s_via_Other_loan_Loan_debtor_assignment.Loan_type_uniqueID == other_loan.Loan_type_uniqueID:
 						new_item.OTHR_LN_DBTR_ASSGNMNT = debtor	
@@ -681,7 +681,7 @@ class F_05_01_REF_FINREP_3_0_Credit_card_debt_Table:
 	INTRNTNL_ORGNSTN_Table = None # INTRNTNL_ORGNSTN
 	FNNCL_ASST_INSTRMNT_Table = None # FNNCL_ASST_INSTRMNT
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT
-	LN_EXCLDNG_RPRCHS_AGRMNT_Table = None # LN_EXCLDNG_RPRCHS_AGRMNT
+	LN_Table = None # LN
 	CRDT_CRD_DBT_DBTR_ASSGNMNT_Table = None # CRDT_CRD_DBT_DBTR_ASSGNMNT
 	CRDT_CRD_DBT_Table = None # CRDT_CRD_DBT
 	Credit_card_debts = []# Credit_card_debt[]
@@ -690,11 +690,11 @@ class F_05_01_REF_FINREP_3_0_Credit_card_debt_Table:
 		# Join up any refered tables that you need to join
 		# loop through the main table
 		# set any references you want to on the new Item so that it can refer to themin operations		
-		for ln in self.LN_EXCLDNG_RPRCHS_AGRMNT_Table:
+		for ln in self.LN_Table:
 			if ln.LN_TYP == '51':
 				credit_card_debt = ln.Loan_type_delegate
 				new_item = Credit_card_debt() 
-				new_item.LN_EXCLDNG_RPRCHS_AGRMNT = ln
+				new_item.LN = ln
 				for debtor in  self.CRDT_CRD_DBT_DBTR_ASSGNMNT_Table:
 					if debtor.Credit_card_debt_has_Debtor_via_Credit_card_debt_Loan_debtor_assignment.Loan_type_uniqueID == credit_card_debt.Loan_type_uniqueID:
 						new_item.CRDT_CRD_DBT_DBTR_ASSGNMNT = debtor
