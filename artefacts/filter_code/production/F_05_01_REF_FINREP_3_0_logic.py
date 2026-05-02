@@ -41,10 +41,10 @@ class F_05_01_REF_FINREP_3_0_UnionItem:
 	def RPYMNT_RGHTS(self) -> str:
 		''' return string from RPYMNT_RGHTS enumeration '''
 		return self.base.RPYMNT_RGHTS()
-	@lineage(dependencies={"base.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self) -> str:
-		''' return string from PRJCT_FNNC_LN enumeration '''
-		return self.base.PRJCT_FNNC_LN()
+	@lineage(dependencies={"base.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self) -> str:
+		''' return string from SPCLSD_LNDNG_EXPSR_TYP enumeration '''
+		return self.base.SPCLSD_LNDNG_EXPSR_TYP()
 	@lineage(dependencies={"base.NGTBL_SCRTY_INDCTR"})
 	def NGTBL_SCRTY_INDCTR(self) -> str:
 		''' return string from NGTBL_SCRTY enumeration '''
@@ -84,8 +84,8 @@ class F_05_01_REF_FINREP_3_0_Base:
 	def RPYMNT_RGHTS() -> str:
 		''' return string from RPYMNT_RGHTS enumeration '''
 		pass
-	def PRJCT_FNNC_LN() -> str:
-		''' return string from PRJCT_FNNC_LN enumeration '''
+	def SPCLSD_LNDNG_EXPSR_TYP() -> str:
+		''' return string from SPCLSD_LNDNG_EXPSR_TYP enumeration '''
 		pass
 	def NGTBL_SCRTY_INDCTR() -> str:
 		''' return string from NGTBL_SCRTY enumeration '''
@@ -143,9 +143,9 @@ class F_05_01_REF_FINREP_3_0_UnionTable :
 class Trade_receivables(F_05_01_REF_FINREP_3_0_Base):
 	pass
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	FNNCL_ASST_INSTRMNT_DRVD_DT = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT"})
 	def GRSS_CRRYNG_AMNT(self):
@@ -166,9 +166,9 @@ class Trade_receivables(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRPS"})
 	def PRPS(self):
 		return self.FNNCL_ASST_INSTRMNT.PRPS
-	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self):
-		return self.FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN
+	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self):
+		return self.FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP
 	pass
 	pass
 	pass
@@ -194,9 +194,9 @@ class Trade_receivables(F_05_01_REF_FINREP_3_0_Base):
 
 class Finance_leases(F_05_01_REF_FINREP_3_0_Base):
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	FNNCL_ASST_INSTRMNT_DRVD_DT = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT"})
 	def GRSS_CRRYNG_AMNT(self):
@@ -216,9 +216,9 @@ class Finance_leases(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRPS"})
 	def PRPS(self):
 		return self.FNNCL_ASST_INSTRMNT.PRPS
-	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self):
-		return self.FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN
+	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self):
+		return self.FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP
 	pass
 	pass
 	pass
@@ -266,9 +266,9 @@ class Reverse_repurchase_agreements(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRPS"})
 	def PRPS(self):
 		return self.FNNCL_ASST_INSTRMNT.PRPS
-	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self):
-		return self.FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN
+	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self):
+		return self.FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP
 	pass
 	pass
 	pass
@@ -282,9 +282,9 @@ class Reverse_repurchase_agreements(F_05_01_REF_FINREP_3_0_Base):
 	def GRSS_CRRYNG_AMNT(self):
 		return self.FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	pass
 	SFT = None # SFT
 	@lineage(dependencies={"SFT.SFT_TYP"})
@@ -302,9 +302,9 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	def CRRYNG_AMNT(self):
 		return self.BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	FNNCL_ASST_INSTRMNT_DRVD_DT = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT"})
 	def GRSS_CRRYNG_AMNT(self):
@@ -313,9 +313,9 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRPS"})
 	def PRPS(self):
 		return self.FNNCL_ASST_INSTRMNT.PRPS
-	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self):
-		return self.FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN
+	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self):
+		return self.FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS
 	@lineage(dependencies={"BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS.HLD_SL_INDCTR"})
 	def HLD_SL_INDCTR(self):
@@ -378,16 +378,16 @@ class Non_Negotiable_bonds(F_05_01_REF_FINREP_3_0_Base):
 	def TYP_INSTRMNT(self):
 		return '1022'
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	pass
 	SCRTY_ISSR_ASSGNMNT = None # SCRTY_ISSR_ASSGNMNT
 	@lineage(dependencies={"SCRTY_ISSR_ASSGNMNT.PRTY_RL_TYP"})
 	def PRTY_RL_TYP(self):
 		return self.SCRTY_ISSR_ASSGNMNT.PRTY_RL_TYP
-	def PRJCT_FNNC_LN(self) -> str:
-		''' return string from PRJCT_FNNC_LN enumeration '''
+	def SPCLSD_LNDNG_EXPSR_TYP(self) -> str:
+		''' return string from SPCLSD_LNDNG_EXPSR_TYP enumeration '''
 		return "2" #"Non_project_finance_loan"
 	def HLD_SL_INDCTR(self) -> str:
 		''' return string from HLD_SL_INDCTR enumeration we need to get this from the IFRS part'''
@@ -398,9 +398,9 @@ class Non_Negotiable_bonds(F_05_01_REF_FINREP_3_0_Base):
 
 class Credit_card_debt(F_05_01_REF_FINREP_3_0_Base):
 	PRTY = None # PRTY
-	@lineage(dependencies={"PRTY.INSTTTNL_SCTR"})
+	
 	def INSTTTNL_SCTR(self):
-		return self.PRTY.INSTTTNL_SCTR
+		return 'S121'
 	FNNCL_ASST_INSTRMNT_DRVD_DT = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT"})
 	def GRSS_CRRYNG_AMNT(self):
@@ -421,9 +421,9 @@ class Credit_card_debt(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRPS"})
 	def PRPS(self):
 		return self.FNNCL_ASST_INSTRMNT.PRPS
-	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self):
-		return self.FNNCL_ASST_INSTRMNT.PRJCT_FNNC_LN
+	@lineage(dependencies={"FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self):
+		return self.FNNCL_ASST_INSTRMNT.SPCLSD_LNDNG_EXPSR_TYP
 	def NGTBL_SCRTY_INDCTR(self):
 		''' return string from NGTBL_SCRTY enumeration of 2 for non-negotiable '''
 		return '2'

@@ -130,10 +130,10 @@ class F_05_01_REF_FINREP_3_0:
 		''' return string from RPYMNT_RGHTS enumeration '''
 		return self.unionOfLayers.RPYMNT_RGHTS()
 
-	@lineage(dependencies={"unionOfLayers.PRJCT_FNNC_LN"})
-	def PRJCT_FNNC_LN(self) -> str:
-		''' return string from PRJCT_FNNC_LN enumeration '''
-		return self.unionOfLayers.PRJCT_FNNC_LN()
+	@lineage(dependencies={"unionOfLayers.SPCLSD_LNDNG_EXPSR_TYP"})
+	def SPCLSD_LNDNG_EXPSR_TYP(self) -> str:
+		''' return string from SPCLSD_LNDNG_EXPSR_TYP enumeration '''
+		return self.unionOfLayers.SPCLSD_LNDNG_EXPSR_TYP()
 
 	@lineage(dependencies={"unionOfLayers.NGTBL_SCRTY_INDCTR"})
 	def NGTBL_SCRTY_INDCTR(self) -> str:
