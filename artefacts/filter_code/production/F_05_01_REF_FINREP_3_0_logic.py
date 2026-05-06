@@ -2,7 +2,67 @@ from pybirdai.bird_data_model import *
 from pybirdai.process_steps.pybird.orchestration import Orchestration
 from pybirdai.process_steps.pybird.csv_converter import CSVConverter
 from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 from pybirdai.annotations.decorators import lineage
+
+
+def _optional_related(obj, attr):
+	if obj is None:
+		return None
+	try:
+		return getattr(obj, attr)
+	except (AttributeError, ObjectDoesNotExist):
+		return None
+
+
+def _resolve_transitive_child_instance(root_obj, target_cls):
+	"""Recursively follow *_delegate fields and direct subtypes."""
+	seen = set()
+
+	def _visit(current):
+		if current is None:
+			return None
+		if isinstance(current, target_cls):
+			return current
+
+		current_id = id(current)
+		if current_id in seen:
+			return None
+		seen.add(current_id)
+
+		meta = _optional_related(current, "_meta")
+		if meta is None:
+			return None
+
+		for field in meta.get_fields():
+			field_name = getattr(field, "name", "")
+			if not field_name.endswith("_delegate"):
+				continue
+			next_obj = _optional_related(current, field_name)
+			resolved = _visit(next_obj)
+			if resolved is not None:
+				return resolved
+
+		for field in meta.get_fields():
+			# auto-created one-to-one fields represent direct subtypes (multi-table inheritance).
+			if not getattr(field, "one_to_one", False) or not getattr(field, "auto_created", False):
+				continue
+			accessor_getter = getattr(field, "get_accessor_name", None)
+			if callable(accessor_getter):
+				accessor_name = accessor_getter()
+			else:
+				accessor_name = getattr(field, "name", None)
+			if not accessor_name:
+				continue
+			child_obj = _optional_related(current, accessor_name)
+			resolved = _visit(child_obj)
+			if resolved is not None:
+				return resolved
+
+		return None
+
+	return _visit(root_obj)
+
 
 class F_05_01_REF_FINREP_3_0_UnionItem:
 	base = None #F_05_01_REF_FINREP_3_0_Base
@@ -302,9 +362,22 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	def CRRYNG_AMNT(self):
 		return self.BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT.CRRYNG_AMNT
 	PRTY = None # PRTY
-	
+	CRDT_INSTTTN = None # CRDT_INSTTTN
+	BRNCH = None # BRNCH
+	FNNCL_CRPRTN = None # FNNCL_CRPRTN
+	STT_LCL_GVRNMNT_SCL_SCRTY_FNDS = None # STT_LCL_GVRNMNT_SCL_SCRTY_FNDS
+	@lineage(dependencies={"CRDT_INSTTTN.INSTTTNL_SCTR","BRNCH.INSTTTNL_SCTR","FNNCL_CRPRTN.INSTTTNL_SCTR","STT_LCL_GVRNMNT_SCL_SCRTY_FNDS.INSTTTNL_SCTR"})
 	def INSTTTNL_SCTR(self):
-		return 'S121'
+		if self.CRDT_INSTTTN is not None:
+			return self.CRDT_INSTTTN.INSTTTNL_SCTR
+		elif self.BRNCH is not None:
+			return self.BRNCH.INSTTTNL_SCTR
+		elif self.FNNCL_CRPRTN is not None:
+			return self.FNNCL_CRPRTN.INSTTTNL_SCTR
+		elif self.STT_LCL_GVRNMNT_SCL_SCRTY_FNDS is not None:
+			return self.STT_LCL_GVRNMNT_SCL_SCRTY_FNDS.INSTTTNL_SCTR
+		else:
+			return '0'
 	FNNCL_ASST_INSTRMNT_DRVD_DT = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	@lineage(dependencies={"FNNCL_ASST_INSTRMNT_DRVD_DT.GRSS_CRRYNG_AMNT"})
 	def GRSS_CRRYNG_AMNT(self):
@@ -337,9 +410,10 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	def NGTBL_SCRTY_INDCTR(self):
 		''' return string from NGTBL_SCRTY enumeration of 2 for non-negotiable '''
 		return '2'
+	OTHR_LN = None # OTHR_LN
+	@lineage(dependencies={"OTHR_LN.RPYMNT_RGHTS"})
 	def RPYMNT_RGHTS(self):
-		''' return string from RPYMNT_RGHTS enumeration of 2 fro Other_than_on_demand_or_short_notice'''
-		return '2'	
+		return self.OTHR_LN.RPYMNT_RGHTS
 	LN = None # LN
 	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
@@ -525,16 +599,27 @@ class F_05_01_REF_FINREP_3_0_Reverse_repurchase_agreements_Table:
 
 	
 class F_05_01_REF_FINREP_3_0_Other_loans_Table:
+	OTHR_LN_Table = None # OTHR_LN
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT
-	PRTY_Table = None # PRTY
+	FNNCL_ASST_INSTRMNT_DRVD_DT_Table = None # FNNCL_ASST_INSTRMNT_DRVD_DT
 	FNNCL_ASST_INSTRMNT_Table = None # FNNCL_ASST_INSTRMNT
 	BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS_Table = None # BLNC_SHT_RCGNSD_FNNCL_ASST_INSTRMNT_IFRS
-	FNNCL_ASST_INSTRMNT_DRVD_DT_Table = None # FNNCL_ASST_INSTRMNT_DRVD_DT
-	LN_Table = None # LN
-	OTHR_LN_Table = None # OTHR_LN
 	OTHR_LN_DBTR_ASSGNMNT_Table = None # OTHR_LN_DBTR_ASSGNMNT
-	INSTRMNT_Table = None
-	INSTRMNT_RL_Table = None # INSTRMNT_RL
+	INTRNTNL_ORGNSTN_Table = None # INTRNTNL_ORGNSTN
+	PRTY_RL_Table = None # PRTY_RL
+	BRNCH_Table = None # BRNCH
+	CRDT_INSTTTN_Table = None # CRDT_INSTTTN
+	INVSTMNT_VHCL_FND_Table = None # INVSTMNT_VHCL_FND
+	OTHR_FNNCL_CRPRTN_Table = None # OTHR_FNNCL_CRPRTN
+	OTHR_ORGNSTNL_UNT_Table = None # OTHR_ORGNSTNL_UNT
+	STT_LCL_GVRNMNT_SCL_SCRTY_FNDS_Table = None # STT_LCL_GVRNMNT_SCL_SCRTY_FNDS
+	INSTRMNT_Table = None # INSTRMNT
+	ENTTY_RL_Table = None # ENTTY_RL
+	ENTTY_TRNSCTN_RL_Table = None # ENTTY_TRNSCTN_RL
+	SRVCR_Table = None # SRVCR
+	LN_DBTR_DRVD_DT_Table = None # LN_DBTR_DRVD_DT
+	LN_DBTR_Table = None # LN_DBTR
+	LN_Table = None # LN
 	Other_loanss = []# Other_Loans[]
 
 	@lineage(dependencies={"OTHR_LN_DBTR_ASSGNMNT.MN_DBTR_INDCTR",
@@ -554,24 +639,40 @@ class F_05_01_REF_FINREP_3_0_Other_loans_Table:
 		# Join up any refered tables that you need to join
 		# loop through the main table
 		# set any references you want to on the new Item so that it can refer to themin operations
-
+		
 		
 		for loan in self.LN_Table:
 			if loan.LN_TYP == '1022':
-				other_loan = loan.Loan_type_delegate
+				other_loan = loan.Loan_type_delegate.othr_ln
 				new_item = Other_loans() 
 				new_item.LN = loan
+				new_item.OTHR_LN = other_loan
 				for debtor in  self.OTHR_LN_DBTR_ASSGNMNT_Table:
 					if debtor.Other_loan_has_Debtor_s_via_Other_loan_Loan_debtor_assignment.Loan_type_uniqueID == other_loan.Loan_type_uniqueID:
 						new_item.OTHR_LN_DBTR_ASSGNMNT = debtor	
 						new_item.PRTY = debtor.Loan_debtor_is_obliged_to_pay_Other_loan_s_via_Other_loan_Loan_debtor_assignment.Party_acts_in_Party_role
 						party_type = new_item.PRTY.Party_type_delegate
-						if party_type and party_type.lgl_prsn:
-							if party_type.lgl_prsn.orgnstn:
-								if party_type.lgl_prsn.orgnstn.Organisation_type_delegate:
-									if party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt:
-										if party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt.intrntnl_orgnstn:
-											new_item.INTRNTNL_ORGNSTN = party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt.intrntnl_orgnstn
+						lgl_prsn = _optional_related(party_type, "lgl_prsn")
+						orgnstn = _optional_related(lgl_prsn, "orgnstn")
+						organisation_type = _optional_related(orgnstn, "Organisation_type_delegate")
+						# Resolve through transitive delegate subclasses (Organisation_type -> ... -> CRDT_INSTTTN).
+						resolved_crdt_instttn = _resolve_transitive_child_instance(organisation_type, CRDT_INSTTTN)
+						if resolved_crdt_instttn:
+							new_item.CRDT_INSTTTN = resolved_crdt_instttn
+						resolved_brnch= _resolve_transitive_child_instance(organisation_type, BRNCH)
+						if resolved_brnch:
+							new_item.BRNCH = resolved_brnch
+						resolved_fnncl_crprtn = _resolve_transitive_child_instance(organisation_type, FNNCL_CRPRTN)
+						if resolved_fnncl_crprtn:
+							new_item.FNNCL_CRPRTN = resolved_fnncl_crprtn
+						resolved_stt_lcl_gvrnmnt_scl_scrty_fnds = _resolve_transitive_child_instance(organisation_type, STT_LCL_GVRNMNT_SCL_SCRTY_FNDS)
+						if resolved_stt_lcl_gvrnmnt_scl_scrty_fnds:
+							new_item.STT_LCL_GVRNMNT_SCL_SCRTY_FNDS = resolved_stt_lcl_gvrnmnt_scl_scrty_fnds
+					
+						intrntnl_orgnstn_gnrl_gvnmnt = _optional_related(organisation_type, "intrntnl_orgnstn_gnrl_gvnmnt")
+						intrntnl_orgnstn = _optional_related(intrntnl_orgnstn_gnrl_gvnmnt, "intrntnl_orgnstn")
+						if intrntnl_orgnstn:
+							new_item.INTRNTNL_ORGNSTN = intrntnl_orgnstn
 						
 				the_instrument = None		
 				for instrument in self.INSTRMNT_Table:
@@ -701,14 +802,15 @@ class F_05_01_REF_FINREP_3_0_Credit_card_debt_Table:
 						if debtor.Loan_debtor_is_obliged_to_pay_Credit_card_debt_Loan_debtor_assignment.Loan_debtor_is_obliged_to_pay_Other_loan_s_via_Other_loan_Loan_debtor_assignment:
 							new_item.PRTY = debtor.Loan_debtor_is_obliged_to_pay_Credit_card_debt_Loan_debtor_assignment.Loan_debtor_is_obliged_to_pay_Other_loan_s_via_Other_loan_Loan_debtor_assignment.Party_acts_in_Party_role
 							party_type = new_item.PRTY.Party_type_delegate
-							if party_type and party_type.lgl_prsn:
-								if party_type.lgl_prsn.orgnstn:
-									if party_type.lgl_prsn.orgnstn.Organisation_type_delegate:
-										if party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt:
-											if party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt.intrntnl_orgnstn:
-												new_item.INTRNTNL_ORGNSTN = party_type.lgl_prsn.orgnstn.Organisation_type_delegate.intrntnl_orgnstn_gnrl_gvnmnt.intrntnl_orgnstn
-						
-				the_instrument = None		
+							lgl_prsn = _optional_related(party_type, "lgl_prsn")
+							orgnstn = _optional_related(lgl_prsn, "orgnstn")
+							organisation_type = _optional_related(orgnstn, "Organisation_type_delegate")
+							intrntnl_orgnstn_gnrl_gvnmnt = _optional_related(organisation_type, "intrntnl_orgnstn_gnrl_gvnmnt")
+							intrntnl_orgnstn = _optional_related(intrntnl_orgnstn_gnrl_gvnmnt, "intrntnl_orgnstn")
+							if intrntnl_orgnstn:
+								new_item.INTRNTNL_ORGNSTN = intrntnl_orgnstn
+							
+					the_instrument = None		
 				for instrument in self.INSTRMNT_Table:
 					if instrument.Instrument_type_by_product_delegate.Instrument_type_by_product_uniqueID == ln.Instrument_type_by_product_uniqueID:
 						the_instrument = instrument
@@ -736,4 +838,3 @@ class F_05_01_REF_FINREP_3_0_Credit_card_debt_Table:
 		self.Credit_card_debts.extend(self.calc_Credit_card_debts())
 		CSVConverter.persist_object_as_csv(self,True)
 		return None
-
