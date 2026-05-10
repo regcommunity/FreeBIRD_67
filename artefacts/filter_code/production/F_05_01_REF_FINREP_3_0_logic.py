@@ -418,6 +418,8 @@ class Other_loans(F_05_01_REF_FINREP_3_0_Base):
 	@lineage(dependencies={"LN.LN_TYP"})
 	def TYP_INSTRMNT(self):
 		return self.LN.LN_TYP
+	def TYP_CLLTRL(self):
+		return '0'
 	pass
 
 class Non_Negotiable_bonds(F_05_01_REF_FINREP_3_0_Base):
